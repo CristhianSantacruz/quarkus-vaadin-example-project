@@ -76,8 +76,12 @@ import '@vaadin/upload/src/vaadin-upload.js';
 import '@vaadin/virtual-list/src/vaadin-virtual-list.js';
 import 'Frontend/generated/jar-resources/virtualListConnector.js';
 import 'Frontend/generated/jar-resources/lit-renderer.ts';
-import '@vaadin/vaadin-material-styles/color-global.js';
-import '@vaadin/vaadin-material-styles/typography-global.js';
+import '@vaadin/vaadin-lumo-styles/color-global.js';
+import '@vaadin/vaadin-lumo-styles/typography-global.js';
+import '@vaadin/vaadin-lumo-styles/sizing.js';
+import '@vaadin/vaadin-lumo-styles/spacing.js';
+import '@vaadin/vaadin-lumo-styles/style.js';
+import '@vaadin/vaadin-lumo-styles/vaadin-iconset.js';
 const loadOnDemand = (key) => { return Promise.resolve(0); }
 window.Vaadin = window.Vaadin || {};
 window.Vaadin.Flow = window.Vaadin.Flow || {};
