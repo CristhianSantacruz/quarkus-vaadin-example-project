@@ -35,7 +35,7 @@ public class ProductService implements IProductService {
             productToUpdate.setDescription(productModel.getDescription());
             productToUpdate.setStock(productModel.getStock());
             productToUpdate.setImage(productModel.getImage());
-            productToUpdate.persistOrUpdate();
+            productToUpdate.update();
             return true;
         }
         return false;

@@ -36,25 +36,14 @@ public class MainView extends VerticalLayout {
         Span titlePage = new Span("Proyecto FullStack Vaadin & Quarkus");
         titlePage.addClassName("title-span");
 
-        TextField textField = new TextField("Ingresa esa tu nombre");
-        textField.addThemeName("bordered");
-
-        Button button2 = new Button("Saludar New",new Icon(VaadinIcon.USER),e->{
-            add(new Paragraph(iproductService.hello(textField.getValue())));
-        });
-
-        button2.addClickShortcut(Key.ENTER);
-
-        HorizontalLayout layout1 = new HorizontalLayout();
-        layout1.add(textField);
-        layout1.add(button2);
-        layout1.setAlignSelf(FlexComponent.Alignment.END, button2);
-
         TextField productName = new TextField("Ingresa el nombre del product");
         TextField productDescription = new TextField("Ingresa el descripcion del product");
         TextField productPrice = new TextField("Ingresa el precio del product");
         TextField productStock = new TextField("Ingresa el stock del product");
         TextField productImage = new TextField("Ingresa el image del product");
+
+        Span titleForm = new Span("Registrar Producto");
+        titleForm.addClassName("title-span");
 
         FormLayout formLayout = new FormLayout();
         formLayout.add(productName,productDescription,productPrice,productStock,productImage);
@@ -72,12 +61,6 @@ public class MainView extends VerticalLayout {
         HorizontalLayout layout2 = new HorizontalLayout();
         layout2.setWidthFull();
         layout2.setJustifyContentMode(JustifyContentMode.CENTER);
-
-        HorizontalLayout layoutProductCards = new HorizontalLayout();
-        layoutProductCards.setAlignItems(Alignment.CENTER);
-        layoutProductCards.setPadding(true);
-        update(iproductService.allProduct(), layoutProductCards);
-
         Button buttonSaveProduct = new Button("Guardar Producto",new Icon(VaadinIcon.SHOP),e->{
             ProductModel productModel = new ProductModel();
             productModel.setName(productName.getValue());
@@ -86,7 +69,7 @@ public class MainView extends VerticalLayout {
             productModel.setStock(Integer.parseInt(productStock.getValue()));
             productModel.setImage(productImage.getValue());
             iproductService.saveProduct(productModel);
-            update(iproductService.allProduct(), layoutProductCards);
+
             gridProducts.setItems(iproductService.allProduct());
             productName.clear();
             productPrice.clear();
@@ -97,15 +80,8 @@ public class MainView extends VerticalLayout {
         });
         layout2.add(buttonSaveProduct);
         addClassName("centered-content");
-        add(titlePage,layout1,formLayout,layout2,layoutProductCards,titleGrid,gridProducts);
+        add(titlePage,titleForm,formLayout,layout2,titleGrid,gridProducts);
 
-    }
-
-    private void update(List<ProductModel> productModels,HorizontalLayout layoutProductCards){
-        for(ProductModel productModel : productModels){
-            ProductCard productCard = new ProductCard(productModel);
-            layoutProductCards.add(productCard);
-        }
     }
 
 }
