@@ -10,6 +10,7 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.pro.licensechecker.Product;
 import jakarta.inject.Inject;
 
@@ -32,20 +33,16 @@ import java.util.List;
 public class MainView extends VerticalLayout {
     public MainView(ProductService iproductService) {
 
-        Span titleSpan = new Span("Proyecto FullStack Vaadin & Quarkus");
-        // Use TextField for standard text input
-        titleSpan.getStyle().set("font-size","30px");
-        titleSpan.getStyle().set("font-style","italic");
-        titleSpan.getStyle().set("text-align","center");
-        titleSpan.getStyle().set("font-weight","bold");
-        titleSpan.getStyle().set("color","skye");
-        TextField textField = new TextField("Ingr esa tu nombre");
+        Span titlePage = new Span("Proyecto FullStack Vaadin & Quarkus");
+        titlePage.addClassName("title-span");
+
+        TextField textField = new TextField("Ingresa esa tu nombre");
         textField.addThemeName("bordered");
 
         Button button2 = new Button("Saludar New",new Icon(VaadinIcon.USER),e->{
             add(new Paragraph(iproductService.hello(textField.getValue())));
         });
-        button2.addClassName("button-style");
+
         button2.addClickShortcut(Key.ENTER);
 
         HorizontalLayout layout1 = new HorizontalLayout();
@@ -67,20 +64,19 @@ public class MainView extends VerticalLayout {
         formLayout.setColspan(productImage,2);
 
 
-        Grid<ProductModel> gridProducts = new Grid<>(ProductModel.class,false);
+        Span titleGrid = new Span("Tabla de Productos");
+        titleGrid.addClassName("title-span");
 
-        gridProducts.addColumn(ProductModel::getName).setHeader("Nombre Producto");
-        //gridProducts.addColumn(ProductModel::getDescription).setHeader("Descripcion");
-        gridProducts.addColumn(ProductModel::getStock).setHeader("Stock");
-        gridProducts.addColumn(ProductModel::getImage).setHeader("Imagen");
-        gridProducts.addColumn(ProductModel::getPrice).setHeader("Precio");
-
-        gridProducts.setItems(iproductService.allProduct());
+        ProductGrid gridProducts = new ProductGrid(iproductService);
 
         HorizontalLayout layout2 = new HorizontalLayout();
         layout2.setWidthFull();
         layout2.setJustifyContentMode(JustifyContentMode.CENTER);
 
+        HorizontalLayout layoutProductCards = new HorizontalLayout();
+        layoutProductCards.setAlignItems(Alignment.CENTER);
+        layoutProductCards.setPadding(true);
+        update(iproductService.allProduct(), layoutProductCards);
 
         Button buttonSaveProduct = new Button("Guardar Producto",new Icon(VaadinIcon.SHOP),e->{
             ProductModel productModel = new ProductModel();
@@ -90,28 +86,26 @@ public class MainView extends VerticalLayout {
             productModel.setStock(Integer.parseInt(productStock.getValue()));
             productModel.setImage(productImage.getValue());
             iproductService.saveProduct(productModel);
+            update(iproductService.allProduct(), layoutProductCards);
             gridProducts.setItems(iproductService.allProduct());
             productName.clear();
             productPrice.clear();
             productDescription.clear();
             productStock.clear();
             productImage.clear();
+
         });
         layout2.add(buttonSaveProduct);
-        // Use custom CSS classes to apply styling. This is defined in
-        // shared-styles.css.
+        addClassName("centered-content");
+        add(titlePage,layout1,formLayout,layout2,layoutProductCards,titleGrid,gridProducts);
 
-        HorizontalLayout layoutProductCards = new HorizontalLayout();
-        layoutProductCards.setAlignItems(Alignment.CENTER);
+    }
 
-        for(ProductModel productModel : iproductService.allProduct()){
+    private void update(List<ProductModel> productModels,HorizontalLayout layoutProductCards){
+        for(ProductModel productModel : productModels){
             ProductCard productCard = new ProductCard(productModel);
             layoutProductCards.add(productCard);
         }
-
-
-        addClassName("centered-content");
-        addClassName("button-style");
-        add(titleSpan,layout1,formLayout,layout2,layoutProductCards,new Span("Tabla de Productos"),gridProducts);
     }
+
 }

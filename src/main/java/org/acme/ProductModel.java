@@ -2,6 +2,7 @@ package org.acme;
 
 import io.quarkus.mongodb.panache.PanacheMongoEntity;
 import io.quarkus.mongodb.panache.common.MongoEntity;
+import org.bson.types.ObjectId;
 
 import java.util.List;
 
@@ -13,6 +14,9 @@ public class ProductModel extends PanacheMongoEntity {
     private double price;
     private int stock;
     private String image;
+
+
+
 
     public static List<ProductModel> getProductsByPriceMore(double price) {
         return ProductModel.find("price >= ?1",price).list();
